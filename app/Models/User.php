@@ -54,4 +54,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Office::class, 'users_offices');
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(ProjectComment::class);
+    }
 }

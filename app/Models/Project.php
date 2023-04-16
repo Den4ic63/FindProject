@@ -20,4 +20,19 @@ class Project extends Model
     {
         return $this->belongsTo(Office::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(ProjectComment::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(ProjectTask::class);
+    }
 }
