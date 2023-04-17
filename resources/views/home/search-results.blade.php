@@ -13,6 +13,7 @@
                         <th>ID компании</th>
                         <th>Created At</th>
                         <th>Updated At</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,6 +25,22 @@
                             <td>{{ $project->office_id }}</td>
                             <td>{{ $project->created_at }}</td>
                             <td>{{ $project->updated_at }}</td>
+                            @if (!$project->users->contains(Auth::user()))
+                                <td>
+                                    <form id="join-form" action="{{ route('project.addUser', $project) }}" method="POST">
+                                        @csrf
+                                        <button id="join-project-btn" type="submit" class="btn btn-primary">Присоедениться</button>
+                                    </form>
+                                </td>
+                            @else
+                                <td>
+                                    <form id="leave-form" action="{{ route('project.deleteUser', $project) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button id="leave-project-btn" type="submit" class="btn btn-primary">Выйти</button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>
@@ -41,6 +58,40 @@
         </div>
     </div>
     </div>
-
 @endif
+<script>
+    $(function() {
+        // отправка запроса на присоединение к проекту
+        $(document).on('submit', '#join-project-form', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    // изменение состояния кнопки
+                    $('#join-project-btn').text('Выйти').attr('id', 'leave-project-btn');
+                    form.attr('action', "{{ route('project.deleteUser', $project) }}");
+                }
+            });
+        });
+
+        // отправка запроса на выход из проекта
+        $(document).on('submit', '#leave-project-form', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: 'DELETE',
+                data: form.serialize(),
+                success: function(response) {
+                    // изменение состояния кнопки
+                    $('#leave-project-btn').text('Присоединиться').attr('id', 'join-project-btn');
+                    form.attr('action', "{{ route('project.addUser', $project) }}");
+                }
+            });
+        });
+    });
+</script>
 

@@ -48,7 +48,6 @@
                                     <button type="submit" class="btn btn-success justify-content-center">Update</button>
                                 </td>
 
-
                             </form>
                         </tr>
                     @endforeach

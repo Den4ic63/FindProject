@@ -9,5 +9,7 @@ Route::prefix('project')->middleware(['auth','admin'])->group(function (){
     Route::get('/create',[ProjectController::class,'create'])->name('project.create');
     Route::post('/',[ProjectController::class,'store'])->name('project.store');
 
+    Route::post('/{project}/addUserinProject',[ProjectController::class,'addUserinProject'])->name('project.addUser');
+    Route::delete('/{project}/addUserinProject',[ProjectController::class,'deleteUserinProject'])->name('project.deleteUser');
 
 });

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Office;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -44,37 +46,38 @@ class ProjectController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         //
     }
+
+    public function addUserinProject(Project $project)
+    {
+        $user = Auth::user();
+
+//        $user->projects()->attach($project->id);
+        $project->users()->attach($user);
+
+        return redirect()->route('home');
+    }
+
+    public function deleteUserinProject(Project $project)
+    {
+        $user = Auth::user();
+        $project->users()->detach($user);
+        return redirect()->route('home');
+    }
+
 }
